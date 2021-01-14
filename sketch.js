@@ -18,72 +18,77 @@ var b1, b2, b3, b4;
 var energy;
 var rechargeImg, rechargeGroup;
 
-
 function preload() {
-  rob_walking = loadAnimation("images/robwalking.png", "images/rob2.png", "images/rob3.png");
-  rob_picking = loadAnimation("images/robwalking.png", "images/rob picking2.png", "images/rob picking3.png")
-  rob_stopped = loadAnimation("images/roboO.png")
+  rob_walking = loadAnimation(
+    "images/robwalking.png",
+    "images/rob2.png",
+    "images/rob3.png"
+  );
+  rob_picking = loadAnimation(
+    "images/robwalking.png",
+    "images/rob picking2.png",
+    "images/rob picking3.png"
+  );
+  rob_stopped = loadAnimation("images/roboO.png");
 
-  waste1 = loadImage("images/waste1.png")
-  waste2 = loadImage("images/waste2.png")
-  waste3 = loadImage("images/waste3.png")
-  waste4 = loadImage("images/plastic1.png")
+  waste1 = loadImage("images/waste1.png");
+  waste2 = loadImage("images/waste2.png");
+  waste3 = loadImage("images/waste3.png");
+  waste4 = loadImage("images/plastic1.png");
 
-  c1 = loadImage("images/car1.png")
-  c2 = loadImage("images/car2.png")
-  c3 = loadImage("images/car3.png")
-  c4 = loadImage("images/car4.png")
+  c1 = loadImage("images/car1.png");
+  c2 = loadImage("images/car2.png");
+  c3 = loadImage("images/car3.png");
+  c4 = loadImage("images/car4.png");
 
   b1 = loadImage("images/full.png");
-  b2 = loadImage("images/battery3.png")
+  b2 = loadImage("images/battery3.png");
   b3 = loadImage("images/battery2.png");
-  b4 = loadImage("images/lessbattery.png")
-  rechargeImg = loadImage("images/recharge.png")
+  b4 = loadImage("images/lessbattery.png");
+  rechargeImg = loadImage("images/recharge.png");
 
-  groundImage = loadImage("images/track.jpg");
+  groundImage = loadImage("images/track1.jpg");
   restartImg = loadImage("images/restart.png");
   gameOverImg = loadImage("images/gameOver.png");
 }
 function setup() {
   createCanvas(800, 600);
 
-  fill("white")
-  ground = createSprite(width / 2, height / 2, 500, 1500);
-  ground.addImage( groundImage);
+  fill("white");
+  ground = createSprite(width / 2, height / 2, width, height);
+  ground.addImage(groundImage);
+  // ground.scale = 2;
   // ground.y = ground.height / 2;
   // ground.velocityY = (6 + 3 * score / 100);
   robot = createSprite(width / 2, 180, 20, 50);
   robot.addAnimation("walking", rob_walking);
   robot.addAnimation("picking", rob_picking);
-  robot.addAnimation("stopped", rob_stopped)
-  robot.scale = 0.6
+  robot.addAnimation("stopped", rob_stopped);
+  robot.scale = 0.6;
 
   energy = createSprite(100, 100);
   energy.scale = 0.2;
 
   score = 0;
-  obstaclesGroup = []
-  carGroup = []
+  obstaclesGroup = [];
+  carGroup = [];
   rechargeGroup = new Group();
 }
 function draw() {
-
-  background("white")
-
-
+  background("white");
 
   if (gameState === PLAY) {
     if (keyDown("up")) {
       robot.y = robot.y - 3;
     }
     if (keyDown("down")) {
-      robot.y = robot.y + 3
+      robot.y = robot.y + 3;
     }
     if (keyDown("right")) {
-      robot.x = robot.x + 3
+      robot.x = robot.x + 3;
     }
     if (keyDown("left")) {
-      robot.x = robot.x - 3
+      robot.x = robot.x - 3;
     }
     if (frameCount % 300 === 0) {
       battery = battery - 15;
@@ -91,16 +96,16 @@ function draw() {
     energy.y = robot.y - 50;
     energy.x = robot.x + 50;
     if (battery >= 75) {
-      energy.addImage(b1)
+      energy.addImage(b1);
     }
     if (battery >= 50 && battery < 75) {
-      energy.addImage(b2)
+      energy.addImage(b2);
     }
     if (battery >= 25 && battery < 50) {
-      energy.addImage(b3)
+      energy.addImage(b3);
     }
     if (battery < 25) {
-      energy.addImage(b4)
+      energy.addImage(b4);
     }
     if (robot.isTouching(rechargeGroup)) {
       battery = max(100, battery + 25);
@@ -111,8 +116,7 @@ function draw() {
     for (var i = 0; i < obstaclesGroup.length; i++) {
       if (robot.isTouching(obstaclesGroup[i])) {
         score = score + 1;
-        fill("white")
-
+        fill("white");
 
         obstaclesGroup[i].destroy();
       }
@@ -122,7 +126,6 @@ function draw() {
     //     score = min(0,score - 5);
     //     obstaclesGroup[i].destroy();
     //     fill("red");
-
 
     //   }
     // }
@@ -136,7 +139,6 @@ function draw() {
 
         restart = createSprite(width / 2, robot.y - 50);
         restart.addImage(restartImg);
-
       }
     }
     camera.position.y = robot.position.y;
@@ -151,7 +153,7 @@ function draw() {
     // }
     drawSprites();
   } else if (gameState === END) {
-    background(150)
+    background(150);
     ground.velocityY = 0;
     robot.changeAnimation("stopped", rob_stopped);
     gameOver.visible = true;
@@ -160,8 +162,7 @@ function draw() {
     // ground.velocityY= 0;
     robot.velocityX = 0;
 
-    fill("yellow")
-
+    fill("yellow");
 
     if (mousePressedOver(restart)) {
       reset();
@@ -169,15 +170,15 @@ function draw() {
     drawSprites();
   }
   // drawSprites();
-  textSize(30)
+  textSize(30);
   text("Score: " + score, camera.position.x + 250, camera.position.y - 250);
   if (gameState === START) {
-    background("pink")
+    background("pink");
     textAlign(CENTER);
     textSize(50);
-    stroke("blue")
-    fill("lightblue")
-    text("Welcome To Rob The Cleaner ", 400, 300)
+    stroke("blue");
+    fill("lightblue");
+    text("Welcome To Rob The Cleaner ", 400, 300);
     text("Press Space to Play ", 400, 370);
     if (keyDown("space")) {
       gameState = PLAY;
@@ -185,7 +186,6 @@ function draw() {
   }
 }
 function reset() {
-
   gameState = START;
   ground.visible = true;
   gameOver.visible = false;
@@ -202,43 +202,43 @@ function reset() {
   robot.x = width / 2;
   robot.y = 180;
   for (var i = 0; i < obstaclesGroup.length; i++) {
-
-
     obstaclesGroup[i].destroy();
-
   }
   for (var i = 0; i < carGroup.length; i++) {
     carGroup[i].destroy();
   }
-
 }
 function spawnObstacles() {
   if (frameCount % 60 === 0) {
     var obstacle = createSprite(0, 0, 10, 40);
     //obstacle.debug = true;
     // obstacle.velocityX = -(6 + 3*score/100);
-    obstacle.x = Math.round(random(50, width - 50))
+    obstacle.x = Math.round(random(50, width - 50));
     obstacle.y = robot.y - 300;
     //generate random obstacles
     var rand = Math.round(random(1, 4));
     switch (rand) {
-      case 1: obstacle.addImage(waste1);
+      case 1:
+        obstacle.addImage(waste1);
         break;
-      case 2: obstacle.addImage(waste2);
+      case 2:
+        obstacle.addImage(waste2);
         break;
-      case 3: obstacle.addImage(waste3);
+      case 3:
+        obstacle.addImage(waste3);
         break;
-      case 4: obstacle.addImage(waste4);
+      case 4:
+        obstacle.addImage(waste4);
 
-      default: break;
+      default:
+        break;
     }
 
-    //assign scale and lifetime to the obstacle           
+    //assign scale and lifetime to the obstacle
     obstacle.scale = 0.5;
     obstacle.lifetime = 1000;
     //add each obstacle to the group
     obstaclesGroup.push(obstacle);
-
   }
 }
 function spawnrecharge() {
@@ -246,18 +246,15 @@ function spawnrecharge() {
     var recharge = createSprite(0, 0, 10, 40);
     //obstacle.debug = true;
     // obstacle.velocityX = -(6 + 3*score/100);
-    recharge.x = Math.round(random(50, width - 50))
+    recharge.x = Math.round(random(50, width - 50));
     recharge.y = robot.y - 300;
     recharge.addImage(rechargeImg);
 
-
-
-    //assign scale and lifetime to the obstacle           
+    //assign scale and lifetime to the obstacle
     recharge.scale = 0.2;
     recharge.lifetime = 1000;
     //add each obstacle to the group
     rechargeGroup.add(recharge);
-
   }
 }
 function spawncars() {
@@ -266,27 +263,31 @@ function spawncars() {
     //obstacle.debug = true;
     // obstacle.velocityX = -(6 + 3*score/100);
     cars.y = robot.y - displayHeight;
-    cars.x = Math.round(random(50, width - 50))
+    cars.x = Math.round(random(50, width - 50));
     cars.velocityY = 10;
     //generate random obstacles
     var rand = Math.round(random(1, 4));
     switch (rand) {
-      case 1: cars.addImage(c1);
+      case 1:
+        cars.addImage(c1);
         break;
-      case 2: cars.addImage(c2);
+      case 2:
+        cars.addImage(c2);
         break;
-      case 3: cars.addImage(c3);
+      case 3:
+        cars.addImage(c3);
         break;
-      case 4: cars.addImage(c4);
+      case 4:
+        cars.addImage(c4);
 
-      default: break;
+      default:
+        break;
     }
 
-    //assign scale and lifetime to the obstacle           
+    //assign scale and lifetime to the obstacle
     cars.scale = 1.0;
     cars.lifetime = 1000;
     //add each obstacle to the group
     carGroup.push(cars);
-
   }
 }
